@@ -1,0 +1,22 @@
+{
+  "name": "candidate-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "jQuery": "^1.7.4",
+    "jsdom": "^3.1.2",
+    "lodash": "^4.8.2",
+    "phantomjs-prebuilt": "^2.1.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@stash.cnvrmedia.net:7999/~jegilbert/candidate-crawler.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
