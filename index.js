@@ -95,17 +95,17 @@ var readGoogleSearchResults = function (callback) {
 
 };
 
-var searchGoogle = function (googleSearchQuery, callback) {
-	page.open('http://www.google.com', function (status) {
+var step0go = function (callback) {
+	page.open('https://10.0.1.44:5555/bot-challenge/step/0/go', function (status) {
 
 		if (status === 'success') {
 
-			console.log('Finished loading google search form.');
+			console.log('First page loaded.');
 
 			// If I don't care what the output is from the javascript I'm running, I can use injectJS
 			if (page.injectJs('browser-scripts/jquery.js')) {
 
-				takeSnapshot('Injected jQuery At Startup');
+				takeSnapshot('Injected jQuery At Start of page 0');
 
 				//printCookies(page);
 
@@ -115,12 +115,12 @@ var searchGoogle = function (googleSearchQuery, callback) {
 
 				// Set a callback function to capture events being kicked off by javascript in the phantom browser.
 				page.onCallback = function (data) {
-					if (data.searchStatus === 'Google Search Completed') {
+					if (data.page0result === 'page0done') {
 
-						takeSnapshot('Form Has Been Submitted');
+						takeSnapshot('page0done');
 
 						// pass in the callback function so it can be called when the results are read.
-						readGoogleSearchResults(callback);
+//						readGoogleSearchResults(callback);
 					} else {
 						console.log('Got a callback event, but it was not what we were waiting for.',
 							JSON.stringify(data)
@@ -131,12 +131,12 @@ var searchGoogle = function (googleSearchQuery, callback) {
 				// If I do care what the output is, and I want to pass arguments to the javascript function, I use evaluate.
 				// This is not documented correctly, but it does work. evaluateJavaScript does not work like this, but should.
 				page.evaluateAsync(
-					fs.read('browser-scripts/submit-google-search-query.js'),
+					fs.read('browser-scripts/page0.js'),
 					0, // no delay needed, but this is where you add one. not sure if this is a timeout or what.
-					googleSearchQuery
+					null
 				);
 
-				console.log('Waiting for Google to finish loading search results...');
+				console.log('Waiting for page to finish submitting.');
 
 			} else {
 				return callback(
@@ -156,7 +156,7 @@ var searchGoogle = function (googleSearchQuery, callback) {
 };
 
 // go search google. Find you some goodies.
-searchGoogle('(intitle:resume or inurl:resume or intext:resume) (2014 or 2015 or 2016) (Denver or Colorado) Oracle Java -jobs', function (err, data) {
+step0go(function (err, data) {
 	if (err) {
 		console.log('Encountered an error');
 		return console.error(err.message, data);
