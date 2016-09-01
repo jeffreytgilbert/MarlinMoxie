@@ -120,7 +120,6 @@ var start = function (callback) {
 	});
 };
 
-// go search google. Find you some goodies.
 start(function (err, data) {
 	if (err) {
 		console.log('Encountered an error');

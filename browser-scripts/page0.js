@@ -1,4 +1,4 @@
-function submitGoogleSearchQuery (searchQuery) {
+function page0js (searchQuery) {
 	'use strict';
 	/* globals $:false */
 
