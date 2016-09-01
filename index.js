@@ -5,7 +5,7 @@
 
 var page = require('webpage').create(),
 	$ = require('jQuery'),
-	fs = require('fs'),
+	fs = require('fs'), // jshint ignore:line
 	utils = require('lodash');
 
 page.settings.userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36';
@@ -48,52 +48,6 @@ page.onAlert 			= function () 		{ takeSnapshot('An Alert Popped Up'); };
 page.onConfirm		 	= function () 		{ takeSnapshot('A Confirm Popped Up'); };
 page.onPrompt 			= function () 		{ takeSnapshot('A Prompt Popped Up'); };
 
-var readGoogleSearchResults = function (callback) {
-
-	var searchResults = {
-		results: [],
-		pages: 1
-	};
-
-	takeSnapshot('Google Search Results Returned');
-
-	// First, set the handler so we are ready to catch the results when they come in
-	page.onCallback = function (dataInWebPage) {
-
-		console.log('crawl-google-results.js and the status is now:', dataInWebPage.status);
-		console.log('On page', JSON.stringify(dataInWebPage.searchResults));
-		dataInWebPage.searchResults.results.forEach(function (result) {
-			searchResults.results.push(result);
-		});
-
-		if (dataInWebPage.status === 'searching') {
-			searchResults.pages += 1;
-			takeSnapshot('Captured A Page Of Results');
-			setTimeout(function () {
-				if (page.injectJs('browser-scripts/jquery.js')) {
-					page.evaluateAsync(
-						fs.read('browser-scripts/crawl-google-results.js'),
-						0, // no delay needed, but this is where you add one. not sure if this is a timeout or what.
-						searchResults.pages
-					);
-				} else {
-					console.error('Could not continue. jQuery would not inject into the page.');
-				}
-			}, 3000);
-		} else {
-			console.log('All done', JSON.stringify(searchResults));
-			return callback(null, searchResults);
-		}
-
-	};
-
-	page.evaluateAsync(
-		fs.read('browser-scripts/crawl-google-results.js'),
-		0, // no delay needed, but this is where you add one. not sure if this is a timeout or what.
-		1 // first page
-	);
-
-};
 
 var step0go = function (callback) {
 	page.open('https://10.0.1.44:5555/bot-challenge/step/0/go', function (status) {
@@ -155,8 +109,19 @@ var step0go = function (callback) {
 	});
 };
 
+var start = function (callback) {
+	page.open('https://10.0.1.44:5555/login', function (status) {
+		phantom.addCookie({
+			'name': 'connect.sid',
+			'value': 's%3At5E3FexTX6-AnqFizJwRyLH3FX6GnXFo.11kyL8nbhm%2BvhpDlBGG37mpz4vZTTNpSPPpPZpp3jMI',
+			'domain': '10.0.1.44'
+		});
+		step0go(callback);
+	});
+};
+
 // go search google. Find you some goodies.
-step0go(function (err, data) {
+start(function (err, data) {
 	if (err) {
 		console.log('Encountered an error');
 		return console.error(err.message, data);
