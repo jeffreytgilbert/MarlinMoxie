@@ -14,7 +14,7 @@ function submitGoogleSearchQuery (searchQuery) {
 
 	$('input[name=bot_answer_0]').val((+values[0])+(+values[1]));
 
-//	$('input[type=submit]').submit();
+	$('input[type=submit]').click();
 
 	if (typeof window.callPhantom === 'function') {
 		window.callPhantom({ page0result: 'page0done' });
