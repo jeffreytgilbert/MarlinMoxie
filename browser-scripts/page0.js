@@ -12,7 +12,7 @@ function submitGoogleSearchQuery (searchQuery) {
 		console.log('Added ', val);
 	});
 
-	$('input[name=bot_answer_0]').val(values[0]+values[1]);
+	$('input[name=bot_answer_0]').val((+values[0])+(+values[1]));
 
 //	$('input[type=submit]').submit();
 
