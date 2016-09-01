@@ -57,7 +57,7 @@ var step0go = function (callback) {
 			console.log('First page loaded.');
 
 			// If I don't care what the output is from the javascript I'm running, I can use injectJS
-			if (page.injectJs('browser-scripts/jquery.js')) {
+			if (page.injectJs('browser-scripts/mathjs.js')) {
 
 				takeSnapshot('Injected jQuery At Start of page 0');
 
