@@ -9,4 +9,3 @@ npm install
 Lastly, you'll want to run the crawler. To do so, run the following:
 phantomjs index.js
 
-BLAMO! Now you're crawling at 3 pages a second. Fancy! (timer is totally arbitrary. I think there's some kind of detection script that catches you crawling and haults your searches, but I haven't hit it because I'm moving slow enough to dodge it.)')'
